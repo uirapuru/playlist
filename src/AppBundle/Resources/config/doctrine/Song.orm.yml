@@ -13,9 +13,11 @@ AppBundle\Entity\Song:
 
     title:
       type: string
+      nullable: true
 
     thumb:
       type: string
+      nullable: true
 
   manyToOne:
     playlist:
