@@ -79,12 +79,20 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
+sonata_core:
+    form_type: horizontal
+
 sonata_block:
     default_contexts: [cms]
     blocks:
-        # enable the SonataAdminBundle block
+        sonata.block.service.text: ~
+        sonata.block.service.rss: ~
         sonata.admin.block.admin_list:
             contexts: [admin]
+
+sonata_admin:
+    title:                Rosomak Admin
+    title_logo:           bundles/app/img/bg.png
 
 sensio_framework_extra:
     request:
@@ -94,14 +102,18 @@ sensio_framework_extra:
 services:
     admin.playlist:
         class: AppBundle\Admin\PlaylistAdmin
-        arguments: [~, AppBundle\Entity\Playlist, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Playlist }
+            - { name: sonata.admin, manager_type: orm, group: Rosomak, label: Playlisty }
+        arguments:
+            - ~
+            - AppBundle\Entity\Playlist
+            - AppBundle:CRUD
+
     admin.song:
         class: AppBundle\Admin\SongAdmin
         arguments: [~, AppBundle\Entity\Song, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Song }
+            - { name: sonata.admin, manager_type: orm, group: Rosomak, label: Piosenki }
 
     app.form_type.playlist:
         class: AppBundle\Form\PlaylistType

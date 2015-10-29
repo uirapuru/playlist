@@ -10,8 +10,13 @@ class SongAdmin extends Admin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('playlist');
-        $formMapper->add('url', 'text');
+        $formMapper->add('playlist', null, [
+            "required" => true
+        ]);
+        $formMapper->add('url', 'text', [
+            "required" => true,
+            "label" => "Youtube video url"
+        ]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
