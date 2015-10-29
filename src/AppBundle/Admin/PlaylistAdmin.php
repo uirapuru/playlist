@@ -22,13 +22,15 @@ class PlaylistAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper->addIdentifier('name');
-        $listMapper->add('_action', 'actions', array(
-            'actions' => array(
-                'play' => array(
-                    'template' => 'AppBundle:CRUD:list__action_play.html.twig'
-                )
-            )
-        ));
+//        $listMapper->add('_action', 'actions', array(
+//            'actions' => array(
+//                'play' => array(
+//                    'template' => 'AppBundle:CRUD:list__action_play.html.twig'
+//                ),
+//                'delete' => [],
+//
+//            )
+//        ));
     }
 
     protected function configureRoutes(RouteCollection $collection)

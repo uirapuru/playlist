@@ -46,6 +46,11 @@ class TitleProvider
         $body = $response->getBody(true);
         parse_str($body, $arr);
 
+//        if(array_key_exists("status", $arr) && $arr["status"] == 'fail')
+//        {
+//            throw new \Exception($arr["reason"]);
+//        }
+
         return $arr;
     }
 }
