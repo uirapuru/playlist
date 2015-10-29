@@ -1,0 +1,18 @@
+AppBundle\Entity\Song:
+  type: entity
+  table: songs
+
+  id:
+    id:
+      type: guid
+      generator: { strategy: UUID }
+
+  fields:
+    url:
+      type: string
+
+  manyToOne:
+    playlist:
+      targetEntity: AppBundle\Entity\Playlist
+      inversedBy: songs
+      cascade: ["all"]

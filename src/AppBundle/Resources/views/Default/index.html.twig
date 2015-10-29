@@ -1,0 +1,55 @@
+<html>
+<head>
+    <title>Playlist</title>
+
+    <script>
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/player_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+
+        function onYouTubePlayerAPIReady() {
+            player = new YT.Player('ytplayer', {
+                height: '390',
+                width: '640',
+                videoId: '{{ videoId }}',
+                events: {
+                    'onStateChange': function (state) {
+                        {% if nextVideoId is not null %}
+                        if(state.data == 0) {
+                            window.location.href = '{{ path("video", {videoId: nextVideoId}) }}';
+                        }
+                        {% endif %}
+                    }
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <div id="ytplayer"></div>
+            </td>
+            <td>
+                {{ form(playlistForm) }}
+
+                <ul>Songs:
+                    {% for song in songs %}
+                        <li><a href="{{ path("video", {videoId: song.videoId}) }}">{{ song.videoId }}</a></li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</body>
+</html>
+

@@ -1,0 +1,18 @@
+AppBundle\Entity\Playlist:
+  type: entity
+  table: playlists
+
+  id:
+    id:
+      type: guid
+      generator: { strategy: UUID }
+
+  fields:
+    name:
+      type: string
+
+  oneToMany:
+    songs:
+      targetEntity: AppBundle\Entity\Song
+      mappedBy: playlist
+      cascade: ["all"]
