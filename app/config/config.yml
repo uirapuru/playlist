@@ -121,5 +121,13 @@ services:
          - { name: doctrine.event_listener, event: prePersist }
          - { name: doctrine.event_listener, event: preUpdate }
 
+    app.listener.song_thumb:
+        class: AppBundle\Listener\CreateSongThumbOnPersist
+        arguments:
+            - @app.title_provider
+        tags:
+         - { name: doctrine.event_listener, event: prePersist }
+         - { name: doctrine.event_listener, event: preUpdate }
+
     app.guzzle_client.youtube:
         class: Guzzle\Http\Client

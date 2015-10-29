@@ -24,6 +24,21 @@ class TitleProvider
     }
 
     public function getTitle(Song $song){
+        $arr = $this->getInfo($song);
+        return $arr["title"];
+    }
+
+    public function getThumb(Song $song){
+        $arr = $this->getInfo($song);
+        return $arr["thumbnail_url"];
+    }
+
+    /**
+     * @param Song $song
+     * @return array
+     */
+    private function getInfo(Song $song)
+    {
         $videoId = $song->videoId();
         $url = 'http://youtube.com/get_video_info?video_id='. $videoId;
         /** @var Response $response */
@@ -31,6 +46,6 @@ class TitleProvider
         $body = $response->getBody(true);
         parse_str($body, $arr);
 
-        return $arr["title"];
+        return $arr;
     }
 }

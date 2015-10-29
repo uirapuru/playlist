@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - playlist@localhost" uuid="0426c081-438a-4eca-8a10-c3e83af3cbf8">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>playlist.*</schema-pattern>
+      <default-schemas>playlist.*</default-schemas>
+    </data-source>
+  </component>
+</project>

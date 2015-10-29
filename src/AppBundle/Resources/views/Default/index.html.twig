@@ -2,6 +2,46 @@
 <head>
     <title>{% if song is not null %}{{ song.title }} ({{ playlist.name }}){% else %}playlist{% endif %}</title>
 
+    <style>
+        img#bg {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1000;
+        }
+
+        #undertable {
+            background-color: rgba(255, 255, 255, 0.7);
+            /*width: 800px;*/
+            /*height: 600px;*/
+        }
+
+        ul#playlist {
+            overflow: auto;
+            max-height: 500px;
+        }
+
+        ul#playlist li {
+        }
+        ul#playlist li a {
+            display: block;
+            width: 360px;
+            min-height: 50px;
+            border: 1px solid grey;
+            background-color: white;
+            margin-bottom: 1px;
+            padding: 10px;
+            color: black;
+            text-decoration: none;
+        }
+        ul#playlist li a.active {
+            background-color: red;
+        }
+
+
+    </style>
+
     <script>
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/player_api";
@@ -14,7 +54,7 @@
             player = new YT.Player('ytplayer', {
                 height: '390',
                 width: '640',
-                playerVars: { 'autoplay': 1, 'controls': 1,'autohide':1,'wmode':'opaque' },
+                playerVars: { 'autoplay': 0, 'controls': 1,'autohide':1,'wmode':'opaque' },
                 videoId: '{% if song is not null %}{{ song.videoId }}{% endif %}',
                 events: {
                     'onStateChange': function (state) {
@@ -31,41 +71,59 @@
 
 </head>
 <body>
-    <table>
-        <tbody>
-        <tr>
-            <td rowspan="3">
-                <div id="ytplayer"></div>
-            </td>
-            <td>
-                {{ form(playlistForm) }}
-            </td>
-            </tr>
-        <tr>
-            <td>
+    <img src="{{ asset('bundles/app/img/bg.png') }}" id="bg"/>
 
-                <ul style="list-style: none">Songs:
-                    {% for lisong in songs %}
-                        <li>
-                            {% if lisong == song %}
-                                <strong>&blacktriangleright;</strong>
-                            {% endif %}
-                            <a href="{{ path("song", {song: lisong.id, playlist: playlist.id}) }}">{{ lisong.title }}</a>
-                        </li>
-                    {% else %}
-                        <li>No songs</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a href="{{ path('admin_app_song_create') }}">dodaj piosenkę</a> |
-                <a href="{{ path("song", {playlist: playlist.id, song: nextVideoId}) }}">następna piosenka</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div id="undertable">
+        <table width="100%">
+            <thead>
+            <tr>
+                <th colspan="2">
+                    {% if song is not null %}
+                    <h1>{{ song.title }}</h1>
+                    {% endif %}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td rowspan="3" width="800">
+                    <div id="ytplayer"></div>
+                </td>
+                <td>
+                    {{ form(playlistForm) }}
+                </td>
+                </tr>
+            <tr>
+                <td>
+
+                    <ul style="list-style: none" id="playlist">Songs:
+                        {% for lisong in songs %}
+                            <li>
+                                <a href="{{ path("song", {song: lisong.id, playlist: playlist.id}) }}" {% if lisong == song %}class="active"{% endif %}>
+                                    {% if lisong == song %}
+                                        <strong>&blacktriangleright;</strong>
+                                    {% endif %}
+                                    {% if lisong.thumb != "" %}<img src="{{ lisong.thumb }}" class="thumb" />{% endif %}
+                                    {{ lisong.title }}
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>No songs</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{{ path('admin_app_song_create') }}">dodaj piosenkę</a>
+                    {% if playlist is not null %}
+                    | <a href="{{ path("song", {playlist: playlist.id, song: nextVideoId}) }}">następna piosenka</a>
+                    {% endif %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 
 </body>

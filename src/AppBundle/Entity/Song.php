@@ -24,6 +24,11 @@ class Song
     private $title;
 
     /**
+     * @var string
+     */
+    private $thumb;
+
+    /**
      * @var Playlist
      */
     private $playlist;
@@ -100,5 +105,21 @@ class Song
     public function title()
     {
         return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function thumb()
+    {
+        return $this->thumb;
+    }
+
+    /**
+     * @param string $thumb
+     */
+    public function setThumb($thumb)
+    {
+        $this->thumb = $thumb;
     }
 }
