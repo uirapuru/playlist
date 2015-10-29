@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Playlist</title>
+    <title>{% if song is not null %}{{ song.title }} ({{ playlist.name }}){% else %}playlist{% endif %}</title>
 
     <script>
         var tag = document.createElement('script');
@@ -14,12 +14,13 @@
             player = new YT.Player('ytplayer', {
                 height: '390',
                 width: '640',
-                videoId: '{{ videoId }}',
+                playerVars: { 'autoplay': 1, 'controls': 1,'autohide':1,'wmode':'opaque' },
+                videoId: '{% if song is not null %}{{ song.videoId }}{% endif %}',
                 events: {
                     'onStateChange': function (state) {
                         {% if nextVideoId is not null %}
                         if(state.data == 0) {
-                            window.location.href = '{{ path("video", {videoId: nextVideoId}) }}';
+                            window.location.href = '{{ path("song", {playlist: playlist.id, song: nextVideoId}) }}';
                         }
                         {% endif %}
                     }
@@ -33,17 +34,34 @@
     <table>
         <tbody>
         <tr>
-            <td>
+            <td rowspan="3">
                 <div id="ytplayer"></div>
             </td>
             <td>
                 {{ form(playlistForm) }}
+            </td>
+            </tr>
+        <tr>
+            <td>
 
-                <ul>Songs:
-                    {% for song in songs %}
-                        <li><a href="{{ path("video", {videoId: song.videoId}) }}">{{ song.videoId }}</a></li>
+                <ul style="list-style: none">Songs:
+                    {% for lisong in songs %}
+                        <li>
+                            {% if lisong == song %}
+                                <strong>&blacktriangleright;</strong>
+                            {% endif %}
+                            <a href="{{ path("song", {song: lisong.id, playlist: playlist.id}) }}">{{ lisong.title }}</a>
+                        </li>
+                    {% else %}
+                        <li>No songs</li>
                     {% endfor %}
                 </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="{{ path('admin_app_song_create') }}">dodaj piosenkę</a> |
+                <a href="{{ path("song", {playlist: playlist.id, song: nextVideoId}) }}">następna piosenka</a>
             </td>
         </tr>
         </tbody>

@@ -19,6 +19,11 @@ class Song
     private $url;
 
     /**
+     * @var string
+     */
+    private $title;
+
+    /**
      * @var Playlist
      */
     private $playlist;
@@ -82,5 +87,18 @@ class Song
         parse_str($result["query"], $result);
 
         return $result["v"];
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function title()
+    {
+        return $this->title;
     }
 }

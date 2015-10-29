@@ -56,6 +56,6 @@ class Playlist
 
     public function __toString()
     {
-        return sprintf("%s (%s)", $this->name(), $this->id());
+        return sprintf("%s (has %d songs)", $this->name(), count($this->songs));
     }
 }

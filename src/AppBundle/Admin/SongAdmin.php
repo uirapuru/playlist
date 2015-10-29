@@ -17,12 +17,14 @@ class SongAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('playlist');
+        $datagridMapper->add('title');
         $datagridMapper->add('url');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper->addIdentifier('playlist');
+        $listMapper->addIdentifier('title');
         $listMapper->addIdentifier('url');
     }
 }

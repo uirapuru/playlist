@@ -10,7 +10,7 @@ parameters:
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    translator:      { fallbacks: ["pl"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -107,3 +107,19 @@ services:
         class: AppBundle\Form\PlaylistType
         tags:
             - { name: form.type, alias: 'playlist_form'}
+
+    app.title_provider:
+        class: AppBundle\Service\TitleProvider
+        arguments:
+            - @app.guzzle_client.youtube
+
+    app.listener.song_title:
+        class: AppBundle\Listener\CreateSongTitleOnPersist
+        arguments:
+            - @app.title_provider
+        tags:
+         - { name: doctrine.event_listener, event: prePersist }
+         - { name: doctrine.event_listener, event: preUpdate }
+
+    app.guzzle_client.youtube:
+        class: Guzzle\Http\Client

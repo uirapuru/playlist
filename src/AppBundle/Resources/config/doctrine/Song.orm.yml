@@ -11,6 +11,9 @@ AppBundle\Entity\Song:
     url:
       type: string
 
+    title:
+      type: string
+
   manyToOne:
     playlist:
       targetEntity: AppBundle\Entity\Playlist
