@@ -124,7 +124,7 @@ services:
     app.title_provider:
         class: AppBundle\Service\TitleProvider
         arguments:
-            - @app.guzzle_client.youtube
+            - @app.goutte_client.youtube
 
     app.listener.song_title:
         class: AppBundle\Listener\CreateSongTitleOnPersist
@@ -144,3 +144,6 @@ services:
 
     app.guzzle_client.youtube:
         class: Guzzle\Http\Client
+
+    app.goutte_client.youtube:
+        class: Goutte\Client
