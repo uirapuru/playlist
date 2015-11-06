@@ -1,0 +1,36 @@
+img#bg {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1000;
+}
+
+#undertable {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+ul#playlist {
+    overflow-y: scroll;
+    max-height: 500px;
+    width: 400px;
+}
+
+ul#playlist li {
+
+}
+
+ul#playlist li a {
+    display: block;
+    width: 360px;
+    min-height: 50px;
+    border: 1px solid grey;
+    background-color: white;
+    margin-bottom: 1px;
+    padding: 10px;
+    color: black;
+    text-decoration: none;
+}
+ul#playlist li a.active {
+    background-color: red;
+}

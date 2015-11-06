@@ -1,75 +1,17 @@
 <html>
 <head>
     <title>{% if song is not null %}{{ song.title }} ({{ playlist.name }}){% else %}playlist{% endif %}</title>
-
-    <style>
-        img#bg {
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1000;
-        }
-
-        #undertable {
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-
-        ul#playlist {
-            overflow-y: scroll;
-            max-height: 500px;
-            width: 400px;
-        }
-
-        ul#playlist li {
-
-        }
-
-        ul#playlist li a {
-            display: block;
-            width: 360px;
-            min-height: 50px;
-            border: 1px solid grey;
-            background-color: white;
-            margin-bottom: 1px;
-            padding: 10px;
-            color: black;
-            text-decoration: none;
-        }
-        ul#playlist li a.active {
-            background-color: red;
-        }
-
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/app/css/style.css') }}" />
 
     <script>
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/player_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-
-        function onYouTubePlayerAPIReady() {
-            player = new YT.Player('ytplayer', {
-                height: '390',
-                width: '640',
-                playerVars: { 'autoplay': 1, 'controls': 1,'autohide':1,'wmode':'opaque' },
-                videoId: '{% if song is not null %}{{ song.videoId }}{% endif %}',
-                events: {
-                    'onStateChange': function (state) {
-                        {% if nextVideoId is not null %}
-                        if(state.data == 0) {
-                            window.location.href = '{{ path("song", {playlist: playlist.id, song: nextVideoId}) }}';
-                        }
-                        {% endif %}
-                    }
-                }
-            });
-        }
+        var videoId = '{% if song is not null %}{{ song.videoId }}{% endif %}';
+        var nextVideoUrl = '{% if nextVideoId is not null %}{{ path("song", {playlist: playlist.id, song: nextVideoId}) }}{% else %}{{ path("homepage") }}{% endif %}';
     </script>
 
+    <script src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+    <script src="{{ asset('bundles/app/js/handler.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/player.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/sockets.js') }}"></script>
 </head>
 <body>
     <img src="{{ asset('bundles/app/img/bg.png') }}" id="bg"/>

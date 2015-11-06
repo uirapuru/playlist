@@ -9,13 +9,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use ZMQ;
+use ZMQContext;
 
 class DefaultController extends Controller
 {
     /**
      * @Template()
-     * @Route("/{playlist}/{song}", name="song", defaults={"playlist" = null, "song" = null})
-     * @Route("/{playlist}", name="playlist", defaults={"playlist" = null})
+     * @Route("/p/{playlist}/s/{song}", name="song", defaults={"playlist" = null, "song" = null})
+     * @Route("/p/{playlist}", name="playlist", defaults={"playlist" = null})
      * @Route("/", name="homepage")
      * @ParamConverter("playlist", class="AppBundle:Playlist", isOptional="true")
      * @ParamConverter("song", class="AppBundle:Song", isOptional="true")
@@ -26,6 +29,7 @@ class DefaultController extends Controller
 
         $videoId = null;
         $nextVideoId = null;
+        $nextSong = null;
 
         $form = $this->createForm("playlist_form", null, [
             "data" => [
@@ -41,7 +45,6 @@ class DefaultController extends Controller
             ]);
         }
 
-
         if(!is_null($playlist)) {
             /** @var Song[] $songs */
             $songs = $this->getDoctrine()->getRepository("AppBundle:Song")->findByPlaylist($playlist);
@@ -54,9 +57,11 @@ class DefaultController extends Controller
                 }
 
                 if(array_key_exists($key + 1, $songs)) {
-                    $nextVideoId = $songs[$key + 1]->id();
+                    $nextSong = $songs[$key + 1];
+                    $nextVideoId = $nextSong->id();
                 } else {
-                    $nextVideoId = $songs[0]->id();
+                    $nextSong = $songs[0];
+                    $nextVideoId = $nextSong->id();
                 }
 
                 break;
@@ -67,9 +72,24 @@ class DefaultController extends Controller
             "videoId" => $videoId,
             "nextVideoId" => $nextVideoId,
             "song" => $song,
+            "nextSong" => $nextSong,
             "songs" => $songs,
             "playlist" => $playlist,
             "playlistForm" => $form->createView()
         ];
+    }
+
+
+    /**
+     * @Route("/command/{command}")
+     */
+    public function sendtestAction($command){
+        $context = new ZMQContext();
+        $socket = $context->getSocket(ZMQ::SOCKET_PUSH, 'my pusher');
+        $socket->connect("tcp://localhost:5555");
+
+        $socket->send(json_encode(["command" => $command]));
+
+        return new Response();
     }
 }
